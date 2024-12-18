@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">MyStory</string>
+    <string name="tagline">Memorize Your Life</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="title_login_page">Start your story</string>
+    <string name="message_login_page">Let\'s create some stories together</string>
+    <string name="title_register_page">Let\'s Join Us</string>
+    <string name="message_register_page">Create your account to explore new journey</string>
+    <string name="name">Name</string>
+    <string name="register">Register</string>
+    <string name="valid_email">Must a valid email</string>
+    <string name="password_char">Password must contain min 8 characters</string>
+    <string name="enter_email">Enter your email</string>
+    <string name="enter_password">Enter your password</string>
+    <string name="show_password">Show password</string>
+    <string name="dont_have_account">Don\'t have account?</string>
+    <string name="already_have_account">Already have account?</string>
+    <string name="enter_name">Enter your name</string>
+    <string name="success_register">Registration successful. Please login.</string>
+    <string name="error_empty_fields">Please fill in all fields.</string>
+    <string name="title_welcome_page">Create your own story</string>
+    <string name="message_welcome_page"><![CDATA[>500 million people has joined us]]></string>
+    <string name="logout">Logout</string>
+    <string name="logout_succes">Logout from your account</string>
 </resources>
