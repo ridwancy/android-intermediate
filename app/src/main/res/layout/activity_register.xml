@@ -32,6 +32,7 @@
             android:textColor="?attr/colorPrimary"/>
 
         <TextView
+            android:id="@+id/descTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -78,7 +79,7 @@
             app:startIconDrawable="@drawable/ic_baseline_email" >
 
             <com.bangkit.mystory.customview.TextInputEditTextEmail
-                android:id="@+id/ed_login_email"
+                android:id="@+id/ed_register_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/enter_email"
@@ -94,7 +95,6 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             app:boxCornerRadiusBottomEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
             app:boxCornerRadiusTopEnd="8dp"
@@ -103,7 +103,7 @@
             app:startIconDrawable="@drawable/ic_baseline_lock">
 
             <com.bangkit.mystory.customview.TextInputEditTextPassword
-                android:id="@+id/ed_login_password"
+                android:id="@+id/ed_register_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/enter_password"
@@ -128,6 +128,7 @@
             app:cornerRadius="8dp" />
 
         <LinearLayout
+            android:id="@+id/account"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center_horizontal"

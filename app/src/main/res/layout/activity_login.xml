@@ -32,6 +32,7 @@
             android:textColor="?attr/colorPrimary"/>
 
         <TextView
+            android:id="@+id/descTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -104,6 +105,7 @@
             app:cornerRadius="8dp" />
 
         <LinearLayout
+            android:id="@+id/account"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center_horizontal"

@@ -1,10 +1,10 @@
 package com.bangkit.mystory.data.repository
 
-
 import ApiService
 import androidx.lifecycle.asLiveData
 import com.bangkit.mystory.data.local.UserEntity
 import com.bangkit.mystory.data.local.UserPreferences
+import com.bangkit.mystory.data.remote.response.UploadResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
@@ -31,13 +31,17 @@ class UserRepository private constructor(
     suspend fun loginUser(email: String, password: String) =
         apiService.login(email, password)
 
+    suspend fun getStories(token: String) = apiService.getStories("Bearer $token")
+
     suspend fun addNewStory(
         token: String,
         image: MultipartBody.Part,
         description: RequestBody,
         latitude: Double? = null,
         longitude: Double? = null
-    ) = apiService.addNewStory(token, image, description, latitude, longitude)
+    ): UploadResponse {
+        return apiService.addNewStory("Bearer $token", image, description, latitude, longitude)
+    }
 
     fun getUserData() = userPreferences.getLogin().asLiveData()
 

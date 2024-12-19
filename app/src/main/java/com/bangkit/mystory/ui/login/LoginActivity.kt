@@ -1,5 +1,7 @@
 package com.bangkit.mystory.ui.login
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -38,6 +40,7 @@ class LoginActivity : AppCompatActivity() {
 
         setupAction()
         observeViewModel()
+        playAnimation()
     }
 
     private fun setupAction() {
@@ -91,5 +94,26 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun playAnimation() {
+        ObjectAnimator.ofFloat(binding.ivOnboarding, View.TRANSLATION_X, -30f, 30f).apply {
+            duration = 6000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
+        val title = ObjectAnimator.ofFloat(binding.tittleTextView, View.ALPHA, 1f).setDuration(100)
+        val desc = ObjectAnimator.ofFloat(binding.descTextView, View.ALPHA, 1f).setDuration(100)
+        val email = ObjectAnimator.ofFloat(binding.edLoginEmail, View.ALPHA, 1f).setDuration(100)
+        val password = ObjectAnimator.ofFloat(binding.edLoginPassword, View.ALPHA, 1f).setDuration(100)
+        val show = ObjectAnimator.ofFloat(binding.showPassword, View.ALPHA, 1f).setDuration(100)
+        val btnLogin = ObjectAnimator.ofFloat(binding.btnLogin, View.ALPHA, 1f).setDuration(100)
+        val acc = ObjectAnimator.ofFloat(binding.account, View.ALPHA, 1f).setDuration(100)
+
+        AnimatorSet().apply {
+            playSequentially(title, desc, email, password, show, btnLogin, acc )
+            start()
+        }
     }
 }

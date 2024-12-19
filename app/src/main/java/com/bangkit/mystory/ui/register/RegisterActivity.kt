@@ -1,5 +1,7 @@
 package com.bangkit.mystory.ui.register
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -37,13 +39,14 @@ class RegisterActivity : AppCompatActivity() {
 
         setupAction()
         observeViewModel()
+        playAnimation()
     }
 
     private fun setupAction() {
         binding.btnRegister.setOnClickListener {
             val name = binding.edRegisterName.text.toString().trim()
-            val email = binding.edLoginEmail.text.toString().trim()
-            val password = binding.edLoginPassword.text.toString().trim()
+            val email = binding.edRegisterEmail.text.toString().trim()
+            val password = binding.edRegisterPassword.text.toString().trim()
 
             if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, R.string.error_empty_fields, Toast.LENGTH_SHORT).show()
@@ -62,14 +65,14 @@ class RegisterActivity : AppCompatActivity() {
         binding.showPassword.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 // Tampilkan password
-                binding.edLoginPassword.inputType =
+                binding.edRegisterPassword.inputType =
                     android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
             } else {
                 // Sembunyikan password
-                binding.edLoginPassword.inputType =
+                binding.edRegisterPassword.inputType =
                     android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
             }
-            binding.edLoginPassword.setSelection(binding.edLoginPassword.text?.length ?: 0)
+            binding.edRegisterPassword.setSelection(binding.edRegisterPassword.text?.length ?: 0)
         }
     }
 
@@ -92,5 +95,27 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun playAnimation() {
+        ObjectAnimator.ofFloat(binding.ivOnboarding, View.TRANSLATION_X, -30f, 30f).apply {
+            duration = 6000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
+        val title = ObjectAnimator.ofFloat(binding.tittleTextView, View.ALPHA, 1f).setDuration(100)
+        val desc = ObjectAnimator.ofFloat(binding.descTextView, View.ALPHA, 1f).setDuration(100)
+        val name = ObjectAnimator.ofFloat(binding.edRegisterName, View.ALPHA, 1f).setDuration(100)
+        val email = ObjectAnimator.ofFloat(binding.edRegisterEmail, View.ALPHA, 1f).setDuration(100)
+        val password = ObjectAnimator.ofFloat(binding.edRegisterPassword, View.ALPHA, 1f).setDuration(100)
+        val show = ObjectAnimator.ofFloat(binding.showPassword, View.ALPHA, 1f).setDuration(100)
+        val btnRegist = ObjectAnimator.ofFloat(binding.btnRegister, View.ALPHA, 1f).setDuration(100)
+        val acc = ObjectAnimator.ofFloat(binding.account, View.ALPHA, 1f).setDuration(100)
+
+        AnimatorSet().apply {
+            playSequentially(title, desc, name, email, password, show, btnRegist, acc )
+            start()
+        }
     }
 }

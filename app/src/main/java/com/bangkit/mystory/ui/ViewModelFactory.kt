@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bangkit.mystory.data.repository.UserRepository
 import com.bangkit.mystory.di.Injection
+import com.bangkit.mystory.ui.addstory.AddStoryViewModel
 import com.bangkit.mystory.ui.login.LoginViewModel
 import com.bangkit.mystory.ui.main.MainViewModel
 import com.bangkit.mystory.ui.register.RegisterViewModel
@@ -34,6 +35,9 @@ class ViewModelFactory(
             }
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {
                 MainViewModel(userRepository) as T
+            }
+            modelClass.isAssignableFrom(AddStoryViewModel::class.java) -> {
+                AddStoryViewModel(userRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

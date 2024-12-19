@@ -35,7 +35,7 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
                     _errorMessage.postValue(response.message)
                 }
             } catch (e: HttpException) {
-                _errorMessage.postValue("Login failed: ${e.message}")
+                _errorMessage.postValue("Login failed")
             } catch (e: Exception) {
                 _errorMessage.postValue("Unexpected error: ${e.message}")
             }

@@ -8,11 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.bangkit.mystory.R
 import com.bangkit.mystory.databinding.ActivityWelcomeBinding
 import com.bangkit.mystory.ui.login.LoginActivity
 import com.bangkit.mystory.ui.register.RegisterActivity

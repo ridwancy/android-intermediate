@@ -24,4 +24,17 @@
     <string name="message_welcome_page"><![CDATA[>500 million people has joined us]]></string>
     <string name="logout">Logout</string>
     <string name="logout_succes">Logout from your account</string>
+    <string name="btnAdd">Add story</string>
+    <string name="photo_story">Photo Story</string>
+    <string name="error_fetching_stories">Failed to fetch stories. Please try again.</string>
+    <string name="story_photo">Story Photo</string>
+    <string name="cameraChoose">Camera</string>
+    <string name="galleryChoose">Gallery</string>
+    <string name="description">Description</string>
+    <string name="upload">Upload Your Story</string>
+    <string name="success_upload">Story uploaded successfully</string>
+    <string name="error_upload">Failed to upload story. Please try again</string>
+    <string name="permission_granted">Permissions granted successfully.</string>
+    <string name="permission_denied">Permissions denied. Camera won\'t work</string>
+    <string name="detail_title">Detail Story</string>
 </resources>
