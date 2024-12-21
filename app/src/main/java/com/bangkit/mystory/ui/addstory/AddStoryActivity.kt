@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -21,6 +22,8 @@ import com.bangkit.mystory.databinding.ActivityAddStoryBinding
 import com.bangkit.mystory.ui.ViewModelFactory
 import com.bangkit.mystory.ui.main.MainActivity
 import com.bangkit.mystory.ui.main.MainViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -31,8 +34,11 @@ class AddStoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddStoryBinding
     private lateinit var addStoryViewModel: AddStoryViewModel
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var selectedImageFile: File? = null
     private lateinit var user: UserEntity
+    private var lat: Double? = null
+    private var lon: Double? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +48,8 @@ class AddStoryActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         checkAndRequestPermissions()
 
@@ -67,7 +75,7 @@ class AddStoryActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -89,8 +97,42 @@ class AddStoryActivity : AppCompatActivity() {
             launcherGallery.launch(intent)
         }
 
+        binding.cbLocation.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                getMyLastLocation()
+            } else {
+                lat = null
+                lon = null
+            }
+        }
+
         binding.btnUpload.setOnClickListener {
             uploadStory()
+        }
+    }
+
+    private fun getMyLastLocation() {
+        if (!this::fusedLocationClient.isInitialized) {
+            Toast.makeText(this, R.string.error_location_client_not_initialized, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                if (location != null) {
+                    lat = location.latitude
+                    lon = location.longitude
+                    Log.d("AddStoryActivity", "Location: $lat, $lon")
+                } else {
+                    Log.d("AddStoryActivity", "Location is null")
+                    Toast.makeText(this, R.string.location_not_found, Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
+            requestPermissions(
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
         }
     }
 
@@ -110,11 +152,11 @@ class AddStoryActivity : AppCompatActivity() {
         val multipartBody = MultipartBody.Part.createFormData(
             "photo",
             file.name,
-            requestImageFile
+            requestImageFile,
         )
 
         showLoading(true)
-        addStoryViewModel.uploadStory(user.token, multipartBody, description).observe(this) { result ->
+        addStoryViewModel.uploadStory(user.token, multipartBody, description, lat, lon).observe(this) { result ->
             showLoading(false)
             result.onSuccess {
                 Toast.makeText(this, R.string.success_upload, Toast.LENGTH_SHORT).show()
@@ -135,7 +177,6 @@ class AddStoryActivity : AppCompatActivity() {
         return compressedFile
     }
 
-
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
@@ -155,7 +196,8 @@ class AddStoryActivity : AppCompatActivity() {
     private fun checkAndRequestPermissions() {
         val permissions = arrayOf(
             android.Manifest.permission.CAMERA,
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            android.Manifest.permission.ACCESS_FINE_LOCATION
         )
 
         val requiredPermissions = permissions.filter {
@@ -173,14 +215,12 @@ class AddStoryActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-                Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_SHORT).show()
+                getMyLastLocation()
             }
         }
     }
-
-
 
     private val launcherGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -204,6 +244,6 @@ class AddStoryActivity : AppCompatActivity() {
 
     companion object {
         private const val CAMERA_PERMISSION_REQUEST_CODE = 100
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 101
     }
-
 }

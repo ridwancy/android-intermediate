@@ -37,4 +37,13 @@
     <string name="permission_granted">Permissions granted successfully.</string>
     <string name="permission_denied">Permissions denied. Camera won\'t work</string>
     <string name="detail_title">Detail Story</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="maps_title">Maps</string>
+    <string name="maps">Maps</string>
+    <string name="add_current_location">Add Current Location</string>
+    <string name="location_not_found">Location not found.Please try again later.</string>
+    <string name="error_location_client_not_initialized">Location request not initialized</string>
+    <string name="location_format">Location: Latitude: %.4f, Longitude: %.4f</string>
+    <string name="location_not_available">Location Not Available</string>
+    <string name="error_missing_token">Token not valid</string>
 </resources>

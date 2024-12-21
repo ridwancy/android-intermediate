@@ -37,11 +37,13 @@ class UserRepository private constructor(
         token: String,
         image: MultipartBody.Part,
         description: RequestBody,
-        latitude: Double? = null,
-        longitude: Double? = null
+        lat: Double? = null,
+        lon: Double? = null
     ): UploadResponse {
-        return apiService.addNewStory("Bearer $token", image, description, latitude, longitude)
+        return apiService.addNewStory("Bearer $token", image, description, lat, lon)
     }
+
+    suspend fun getStoriesWithLocation(token: String) = apiService.getStoriesWithLocation(token)
 
     fun getUserData() = userPreferences.getLogin().asLiveData()
 

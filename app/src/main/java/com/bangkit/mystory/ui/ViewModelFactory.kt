@@ -8,6 +8,7 @@ import com.bangkit.mystory.di.Injection
 import com.bangkit.mystory.ui.addstory.AddStoryViewModel
 import com.bangkit.mystory.ui.login.LoginViewModel
 import com.bangkit.mystory.ui.main.MainViewModel
+import com.bangkit.mystory.ui.maps.MapsViewModel
 import com.bangkit.mystory.ui.register.RegisterViewModel
 
 class ViewModelFactory(
@@ -38,6 +39,9 @@ class ViewModelFactory(
             }
             modelClass.isAssignableFrom(AddStoryViewModel::class.java) -> {
                 AddStoryViewModel(userRepository) as T
+            }
+            modelClass.isAssignableFrom(MapsViewModel::class.java) -> {
+                MapsViewModel(userRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

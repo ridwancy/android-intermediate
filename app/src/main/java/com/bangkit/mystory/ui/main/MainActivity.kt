@@ -18,6 +18,7 @@ import com.bangkit.mystory.ui.ViewModelFactory
 import com.bangkit.mystory.ui.adapter.StoryListAdapter
 import com.bangkit.mystory.ui.addstory.AddStoryActivity
 import com.bangkit.mystory.ui.detail.DetailActivity
+import com.bangkit.mystory.ui.maps.MapsActivity
 import com.bangkit.mystory.ui.onboarding.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {
@@ -116,11 +117,27 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_map -> {
+                navigateToMap()
+                true
+            }
             R.id.action_logout -> {
                 performLogout()
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun navigateToMap() {
+        mainViewModel.getLogin().observe(this) { user ->
+            if (user.isLogin) {
+                val intent = Intent(this, MapsActivity::class.java)
+                intent.putExtra(MapsActivity.EXTRA_TOKEN, user.token)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, R.string.error_missing_token, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

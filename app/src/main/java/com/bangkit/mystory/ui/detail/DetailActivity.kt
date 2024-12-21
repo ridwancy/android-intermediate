@@ -32,6 +32,13 @@ class DetailActivity : AppCompatActivity() {
         Glide.with(this)
             .load(story.photoUrl)
             .into(binding.ivDetailPhoto)
+
+        val locationText = if (story.lat != null && story.lon != null) {
+            getString(R.string.location_format, story.lat, story.lon)
+        } else {
+            getString(R.string.location_not_available)
+        }
+        binding.tvLocation.text = locationText
     }
 
     override fun onSupportNavigateUp(): Boolean {
