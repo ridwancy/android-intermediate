@@ -1,19 +1,13 @@
 package com.bangkit.mystory.ui.maps
 
-import android.Manifest
-import android.content.res.Resources
-import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.bangkit.mystory.R
 import com.bangkit.mystory.data.remote.response.StoryResponse
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -22,10 +16,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.bangkit.mystory.databinding.ActivityMapsBinding
 import com.bangkit.mystory.ui.ViewModelFactory
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MapStyleOptions
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -81,10 +72,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             if (lat != null && lon != null) {
                 val latLng = LatLng(lat, lon)
                 mMap.addMarker(
-                    MarkerOptions()
-                        .position(latLng)
-                        .title(story.name)
-                        .snippet(story.description)
+                    MarkerOptions().position(latLng).title(story.name).snippet(story.description)
                 )
                 boundsBuilder.include(latLng)
                 hasValidMarkers = true
@@ -111,9 +99,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                onBackPressedDispatcher.onBackPressed()
+                finish()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

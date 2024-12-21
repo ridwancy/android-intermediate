@@ -52,8 +52,6 @@ dependencies {
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.play.services.maps)
     implementation(libs.androidx.paging.common.android)
-    testImplementation(libs.junit)
-    testImplementation(libs.junit.jupiter)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
@@ -88,4 +86,7 @@ dependencies {
     androidTestImplementation(libs.androidx.core.testing) // InstantTaskExecutorRule
     androidTestImplementation(libs.kotlinx.coroutines.test) //TestDispatcher
     androidTestImplementation(libs.espresso.contrib) //RecyclerViewActions
+
+    testImplementation(libs.junit) // JUnit 4
+    testImplementation (libs.androidx.core.testing)
 }

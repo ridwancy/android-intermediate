@@ -1,32 +1,24 @@
 package com.bangkit.mystory.ui.main
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bangkit.mystory.R
 import com.bangkit.mystory.databinding.ActivityMainBinding
 import com.bangkit.mystory.ui.ViewModelFactory
 import com.bangkit.mystory.ui.adapter.LoadingStateAdapter
 import com.bangkit.mystory.ui.adapter.StoryListAdapter
-import com.bangkit.mystory.ui.adapter.StoryPagingAdapter
 import com.bangkit.mystory.ui.addstory.AddStoryActivity
 import com.bangkit.mystory.ui.detail.DetailActivity
 import com.bangkit.mystory.ui.maps.MapsActivity
 import com.bangkit.mystory.ui.onboarding.WelcomeActivity
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private val mainViewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
     }
-    private lateinit var storyAdapter: StoryPagingAdapter
+    private lateinit var storyAdapter: StoryListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        storyAdapter = StoryPagingAdapter { story ->
+        storyAdapter = StoryListAdapter { story ->
             val intent = Intent(this, DetailActivity::class.java)
             intent.putExtra(DetailActivity.EXTRA_STORY, story)
             startActivity(intent)
@@ -63,16 +55,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         storyAdapter.addLoadStateListener { loadState ->
-            Log.d("LoadStateListener", "Current LoadState: $loadState")
-            binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
-            binding.rvStories.isVisible = loadState.source.refresh is LoadState.NotLoading
-            if (loadState.source.refresh is LoadState.Error) {
-                val errorMessage = (loadState.source.refresh as LoadState.Error).error.localizedMessage
+            binding.progressBar.isVisible = loadState.source.refresh is androidx.paging.LoadState.Loading
+            binding.rvStories.isVisible = loadState.source.refresh is androidx.paging.LoadState.NotLoading
+            if (loadState.source.refresh is androidx.paging.LoadState.Error) {
+                val errorMessage = (loadState.source.refresh as androidx.paging.LoadState.Error).error.localizedMessage
                 Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
-                Log.e("LoadStateListener", "Error: ${(loadState.source.refresh as LoadState.Error).error.localizedMessage}")
             }
         }
-
     }
 
     private fun observeLogin() {
@@ -92,7 +81,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateToWelcome() {
-        Toast.makeText(this, R.string.error_login_required, Toast.LENGTH_SHORT).show()
         startActivity(Intent(this, WelcomeActivity::class.java))
         finish()
     }
@@ -138,5 +126,10 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.deleteLogin()
         Toast.makeText(this, R.string.logout_succes, Toast.LENGTH_SHORT).show()
         navigateToWelcome()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
     }
 }

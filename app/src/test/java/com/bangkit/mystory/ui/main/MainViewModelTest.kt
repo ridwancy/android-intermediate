@@ -11,16 +11,15 @@ import androidx.recyclerview.widget.ListUpdateCallback
 import com.bangkit.mystory.data.remote.response.ListStoryItem
 import com.bangkit.mystory.data.repository.UserRepository
 import com.bangkit.mystory.ui.adapter.StoryListAdapter
-import com.bangkit.mystory.ui.adapter.StoryPagingAdapter
 import com.bangkit.mystory.util.DataDummy
 import com.bangkit.mystory.util.MainDispatcherRule
 import com.bangkit.mystory.util.getOrAwaitValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.*
 import org.junit.Rule
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
@@ -40,7 +39,7 @@ class MainViewModelTest {
     private lateinit var userRepository: UserRepository
 
     @Test
-    fun `when Get Story Should Not Null and Return Data`() = runTest {
+    fun `when get story should not null and return data`() = runTest {
         val dummyStory = DataDummy.generateDummyStoryResponse()
         val data: PagingData<ListStoryItem> = StoryPagingSource.snapshot(dummyStory)
         val expectedQuote = MutableLiveData<PagingData<ListStoryItem>>()
@@ -51,11 +50,10 @@ class MainViewModelTest {
         val actualStory: PagingData<ListStoryItem> = mainViewModel.getStories("token").getOrAwaitValue()
 
         val differ = AsyncPagingDataDiffer(
-            diffCallback = StoryPagingAdapter.DIFF_CALLBACK,
+            diffCallback = StoryListAdapter.DIFF_CALLBACK,
             updateCallback = noopListUpdateCallback,
             workerDispatcher = Dispatchers.Main,
         )
-
         differ.submitData(actualStory)
 
         assertNotNull(differ.snapshot())
@@ -64,7 +62,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `when Get Story Empty Should Return No Data`() = runTest {
+    fun `when get story empty should return no data`() = runTest {
         val data: PagingData<ListStoryItem> = PagingData.from(emptyList())
         val expectedQuote = MutableLiveData<PagingData<ListStoryItem>>()
         expectedQuote.value = data
@@ -72,11 +70,10 @@ class MainViewModelTest {
         val mainViewModel = MainViewModel(userRepository)
         val actualQuote: PagingData<ListStoryItem> = mainViewModel.getStories("token").getOrAwaitValue()
         val differ = AsyncPagingDataDiffer(
-            diffCallback = StoryPagingAdapter.DIFF_CALLBACK,
+            diffCallback = StoryListAdapter.DIFF_CALLBACK,
             updateCallback = noopListUpdateCallback,
             workerDispatcher = Dispatchers.Main,
         )
-
         differ.submitData(actualQuote)
         assertEquals(0, differ.snapshot().size)
     }

@@ -37,9 +37,6 @@ class MapsViewModel (private val userRepository: UserRepository) : ViewModel() {
         }
     }
 
-    fun getLogin(): LiveData<UserEntity> {
-        return userRepository.getUserData()
-    }
 
     companion object {
         private const val TAG = "MainViewModel"
