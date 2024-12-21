@@ -46,4 +46,7 @@
     <string name="location_format">Location: Latitude: %.4f, Longitude: %.4f</string>
     <string name="location_not_available">Location Not Available</string>
     <string name="error_missing_token">Token not valid</string>
+    <string name="retry">Retry again</string>
+    <string name="error_login_required">Login Required</string>
+    <string name="error_loading_stories">Error loading stories</string>
 </resources>

@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.bangkit.mystory.data.local.UserEntity
 import com.bangkit.mystory.data.remote.response.ListStoryItem
 import com.bangkit.mystory.data.repository.UserRepository
@@ -26,17 +28,8 @@ class MainViewModel(
         }
     }
 
-    fun getStories(token: String): LiveData<Result<List<ListStoryItem>>> {
-        return liveData {
-            try {
-                val response = userRepository.getStories(token)
-                Log.d("MainViewModel", "Fetched Stories: ${response.listStory.size}")
-                emit(Result.success(response.listStory))
-            } catch (e: Exception) {
-                Log.e("MainViewModel", "Error fetching stories: ${e.message}")
-                emit(Result.failure(e))
-            }
-        }
+    fun getStories(token: String): LiveData<PagingData<ListStoryItem>> {
+        return userRepository.getStories(token).cachedIn(viewModelScope)
     }
 
 }

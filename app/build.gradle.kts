@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.androidx.paging.common.android)
     testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
@@ -77,4 +78,14 @@ dependencies {
     // Paging 3
     implementation(libs.androidx.paging.runtime.ktx)
 
+    // Unit Testing Paging 3
+    testImplementation(libs.androidx.core.testing) // InstantTaskExecutorRule
+    testImplementation(libs.kotlinx.coroutines.test) //TestDispatcher
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
+
+    //special instrumentation testing
+    androidTestImplementation(libs.androidx.core.testing) // InstantTaskExecutorRule
+    androidTestImplementation(libs.kotlinx.coroutines.test) //TestDispatcher
+    androidTestImplementation(libs.espresso.contrib) //RecyclerViewActions
 }

@@ -1,9 +1,16 @@
 package com.bangkit.mystory.data.repository
 
 import ApiService
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.bangkit.mystory.data.local.UserEntity
 import com.bangkit.mystory.data.local.UserPreferences
+import com.bangkit.mystory.data.paging.StoryPagingSource
+import com.bangkit.mystory.data.remote.response.ListStoryItem
 import com.bangkit.mystory.data.remote.response.UploadResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -31,7 +38,15 @@ class UserRepository private constructor(
     suspend fun loginUser(email: String, password: String) =
         apiService.login(email, password)
 
-    suspend fun getStories(token: String) = apiService.getStories("Bearer $token")
+    fun getStories(token: String): LiveData<PagingData<ListStoryItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 3,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { StoryPagingSource(token, apiService) }
+        ).liveData
+    }
 
     suspend fun addNewStory(
         token: String,
